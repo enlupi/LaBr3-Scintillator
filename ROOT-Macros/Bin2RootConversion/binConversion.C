@@ -10,7 +10,8 @@ using namespace std;
 //                                                                           //
 //  Takes a binary file as input and converts it to a .root file containing  //
 //  a TTree of the variables of interests.                                   //
-//  Input parameters are:                                                    //
+//                                                                           //
+//  Input parameters:                                                        //
 //    - input binary file name                                               //
 //    - output .root file name                                               //
 //    - string of readoptions:                                               //
@@ -18,7 +19,10 @@ using namespace std;
 //      "Both" if the energy is in ADC channels and KeV / MeV (default is    //
 //             ADC channels only)                                            //
 //      "DPP/PSD" if there is at least one board running DPP‐PSD firmware    //
-//      "Waves" is wave samples taking is enabled (NOT YET IMPLEMENTED!)     // 
+//      "Waves" is wave samples taking is enabled (NOT YET IMPLEMENTED!)     //
+//                                                                           //
+//  Output:                                                                  //       
+//    - void                                                                 // 
 //                                                                           //
 /////////////////////////////////////////////////////////////////////////////// 
 
