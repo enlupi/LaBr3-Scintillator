@@ -9,7 +9,7 @@
 //  symmetric either around the mean or zero.                                //
 //                                                                           //
 //  Input variables:                                                         //
-//    - "h" (T!HD*) = pointer to histogram to be analyzed                    //
+//    - "h" (T1HD*) = pointer to histogram to be analyzed                    //
 //    - "perc" (double) = value of the integral in the wanted interval,      //
 //       expressed as fraction w.r.t. total integral                         //
 //    - "start" (string) = point around which the interval will be           //
