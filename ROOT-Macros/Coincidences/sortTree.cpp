@@ -14,7 +14,7 @@
 //        Defaults to "time_stamp", assuming time-based ordering             //
 //    - "desc_order" (bool) = if true, sortes in descending order and        //
 //        viceversa. Defaults to "false" (ascending order)                   //
-//    - "save" (bool) = if true, svaes sorted TTree in input TFile           //
+//    - "save" (bool) = if true, saves sorted TTree in input TFile           //
 //        Defaults to "false"                                                //
 //                                                                           //
 //  Output:                                                                  //
