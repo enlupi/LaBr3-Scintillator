@@ -1,7 +1,7 @@
 - Rosa Maria Guizzetti
 - Enrico Lupi
 
-# LaBr3 Scintillator
+# LaBr3 Scintillators
 
 ## Abstract
 
