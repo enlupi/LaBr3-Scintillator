@@ -1,0 +1,14 @@
+time_stamp  energy_calib  channel
+
+/home/enric/University/AdvancedPhysicsLab/Data/test/
+
+run1.root  tree_1
+run2.root  tree_2
+run3.root  tree_3
+run4.root  tree_4
+run5.root  tree_5
+run6.root  tree_6
+run7.root  tree_7
+run8.root  tree_8
+run9.root  tree_9
+

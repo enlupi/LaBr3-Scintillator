@@ -1,0 +1,9 @@
+2725  30  2800
+16000  450  540
+
+/home/enric/University/AdvancedPhysicsLab/Data/test/
+
+run7.root  coinc_tree_7  7
+run8.root  coinc_tree_8  8
+run9.root  coinc_tree_9  9
+

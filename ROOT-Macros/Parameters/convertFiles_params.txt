@@ -1,0 +1,14 @@
+/home/enric/University/AdvancedPhysicsLab/Data/Raw-Data/
+/home/enric/University/AdvancedPhysicsLab/Data/test/
+
+DataR_run0.BIN  run0.root
+DataR_run1.BIN  run1.root
+DataR_run2.BIN  run2.root
+DataR_run3.BIN  run3.root
+DataR_run4.BIN  run4.root
+DataR_run5.BIN  run5.root
+DataR_run6.BIN  run6.root
+DataR_run7.BIN  run7.root
+DataR_run8.BIN  run8.root
+DataR_run9.BIN  run9.root
+
