@@ -14,10 +14,11 @@ double meanInRange(TH1F* h, int min, int length);
 //                                                                           //
 //  Plots the histogram of coincidence times in the specified channel, then  //
 //  fits it with a double exponential + constant background and selects a    //
-//  rejection region. An image of the plot is saved as .png.		 		         //
+//  rejection region. An image of the plot is saved as .png.                 //
 //                                                                           //
 //  Input parameters:                                                        //
-//    - "filename" (string) = = name of .root file containing TTree          //
+//    - "file" (TFile*) = pointer to the .root file containing the TTree     //
+//        to be analysed                                                     //
 //    - "treename" (string) = name of TTree of interest                      //
 //    - "ch" (int) = channel number                                          //
 //    - "path" (string) = path where to save the image.                      //
@@ -28,10 +29,9 @@ double meanInRange(TH1F* h, int min, int length);
 //                                                                           //
 ///////////////////////////////////////////////////////////////////////////////
 
-void timeHistos(string filename, string treename, int ch,
+void timeHistos(TFile* file , string treename, int ch,
                 string path = "ProcessedData/Images/") {
 
-  TFile* file = new TFile(filename.c_str(), "UPDATE");
   TTree* tree = (TTree*) file->Get(treename.c_str())->Clone(); 
   
   // get run info
@@ -44,7 +44,7 @@ void timeHistos(string filename, string treename, int ch,
   // HISTOGRAMS //
   
   // make time difference histograms
-  string histname = "hist_timeDiff_" + to_string(ch) + "_" + runID;
+  string histname = "hist_timeDiff_" + runID + "_" + to_string(ch);
   string histtitle = runID + ": Time Differences ch " + to_string(ch);
   TH1F* h = new TH1F(histname.c_str(), histtitle.c_str(),
                      100, -1e5, 1e5);

@@ -23,8 +23,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 TTree* sortTree(TFile* file, std::string treename,
-		            std::string time_var = "time_stamp", bool desc_order = false,
-		            bool save = false) {
+		std::string time_var = "time_stamp", bool desc_order = false,
+		bool save = false) {
 
   // get TTree
   TTree* tree = (TTree*) file->Get(treename.c_str())->Clone();

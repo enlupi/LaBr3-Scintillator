@@ -15,7 +15,7 @@ Int_t findMinDt(Int_t i, ULong64_t* t, UShort_t* c, Long64_t& dt_min,
 //  other channel and builds a TTree to store coincidence information.       //
 //  The new TTree contains the following branches:                           // 
 //    - "channel" (unisgned short) = channel the mesurement was taken in     //
-//    - "energy_main" (int) = energy measurement              						   //
+//    - "energy_main" (int) = energy measurement                             //
 //    - "count_main" (unsigned short) = number of times the event was part   //
 //        of a coincidence                                                   //
 //    - "energy_coinc" (unsigned short) = energy measurement of the event    //
@@ -28,7 +28,7 @@ Int_t findMinDt(Int_t i, ULong64_t* t, UShort_t* c, Long64_t& dt_min,
 //    - "tree" (TTree*) = pointer to the (sorted) TTree on which to compute  //
 //        coincidences                                                       //
 //    - "time_var" (string) = name of branch corresponding to event time.    //
-//        Defaults to "time_stamp"
+//        Defaults to "time_stamp"                                           //
 //    - "energy_var" (string) = name of branch corresponding to event        //
 //        energy. Defaults to "energy_ch"                                    //
 //    - "channel" (string) = name of branch corresponding to measurement     //
@@ -42,24 +42,38 @@ Int_t findMinDt(Int_t i, ULong64_t* t, UShort_t* c, Long64_t& dt_min,
 ///////////////////////////////////////////////////////////////////////////////
 
 TTree* timeDiff(TTree* tree, string time_var = "time_stamp",
-		            string energy_var = "energy_ch", string channel_var = "channel",
-		            bool save = true) {
+                string energy_var = "energy_ch", string channel_var = "channel",
+                bool save = true) {
+                
+  bool not_calib = strcmp("energy_calib", energy_var.c_str()); 
 
   // get time stamps and channel arrays
   Int_t nentries = (Int_t) tree->GetEntries();
-  ULong64_t* t = new ULong64_t[nentries];
-  UShort_t* e  = new UShort_t[nentries];
-  UShort_t* c  = new UShort_t[nentries];
+  ULong64_t* t       = new ULong64_t[nentries];
+  UShort_t* e        = new UShort_t[nentries];
+  Double_t* e_calib  = new Double_t[nentries];
+  UShort_t* c        = new UShort_t[nentries];
   ULong64_t ts;
   UShort_t  en;
+  Double_t en_calib;
   UShort_t  ch;
   tree->SetBranchAddress(time_var.c_str(),    &ts);
-  tree->SetBranchAddress(energy_var.c_str(),  &en);
+  if(not_calib) {
+    tree->SetBranchAddress(energy_var.c_str(),  &en);
+  }
+  else {
+    tree->SetBranchAddress(energy_var.c_str(),  &en_calib);
+  }
   tree->SetBranchAddress(channel_var.c_str(), &ch);
   for (Int_t i = 0; i < nentries; i++) {
     tree->GetEntry(i);
     t[i] = ts;
-    e[i] = en;
+    if(not_calib) {
+      e[i] = en;
+    }
+    else {
+      e_calib[i] = en_calib;
+    }
     c[i] = ch;
   }
   
@@ -92,6 +106,7 @@ TTree* timeDiff(TTree* tree, string time_var = "time_stamp",
   // create new TTree to store coincidence information
   UShort_t channel;
   UShort_t energy_main, energy_coinc;
+  Double_t energy_calib_main, energy_calib_coinc;
   Int_t  count_main, count_coinc;
   Long64_t dt;
   
@@ -101,9 +116,15 @@ TTree* timeDiff(TTree* tree, string time_var = "time_stamp",
   
   TTree* tree_coinc = new TTree(coincname.c_str(), coinctitle.c_str());
   tree_coinc->Branch("channel",      &channel,      "channel/s");
-  tree_coinc->Branch("energy_main",  &energy_main,  "energy_main/s");
+  if(not_calib) {
+    tree_coinc->Branch("energy_main",  &energy_main,  "energy_main/s");
+    tree_coinc->Branch("energy_coinc", &energy_coinc, "energy_coinc/s");
+  }
+  else {
+    tree_coinc->Branch("energy_main",  &energy_calib_main,  "energy_calib_main/D");
+    tree_coinc->Branch("energy_coinc", &energy_calib_coinc, "energy_calib_coinc/D");
+  }
   tree_coinc->Branch("count_main",   &count_main,   "count_ch0/I");
-  tree_coinc->Branch("energy_coinc", &energy_coinc, "energy_main/s");
   tree_coinc->Branch("count_coinc",  &count_coinc,  "count_coinc/I");
   tree_coinc->Branch("time_diff",    &dt,           "time_diff/L");
 
@@ -113,9 +134,15 @@ TTree* timeDiff(TTree* tree, string time_var = "time_stamp",
     bool chk_coinc = (ev_coinc[i] != -1);
     if (chk_coinc) {
       channel = c[i];
-      energy_main = e[i];
+      if (not_calib) {
+        energy_main = e[i];
+        energy_coinc =  e[ev_coinc[i]];
+      }
+      else {
+        energy_calib_main = e_calib[i];
+        energy_calib_coinc =  e_calib[ev_coinc[i]];
+      }
       count_main = n_coinc[i];
-      energy_coinc =  e[ev_coinc[i]];
       count_coinc = n_coinc[ev_coinc[i]];
       dt = dt_coinc[i];
       
@@ -130,6 +157,7 @@ TTree* timeDiff(TTree* tree, string time_var = "time_stamp",
  
   delete[] t;
   delete[] e;
+  delete[] e_calib;
   delete[] c;
   delete[] ev_coinc;
   delete[] n_coinc;
